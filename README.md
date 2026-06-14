@@ -4,8 +4,7 @@ A ComfyUI utility node for **WAN video model** workflows — designed to work wi
 
 When generating long videos with WAN, each workflow run has a maximum frame limit (default **81 frames**). This node automatically calculates how many rounds are needed for your total frame count, and tells you exactly how many frames to use in each round — including the final partial round.
 
- <img width="1816" height="1214" alt="image" src="https://github.com/user-attachments/assets/3c73765a-57e0-4f66-baaf-d10707aa4347" />
-
+![preview](preview.png)
 
 ---
 
@@ -36,6 +35,7 @@ The node will appear under the category: `Video / Frame Utils`
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `total_frames` | INT | 163 | The total number of frames you want your final video to be |
+| `fps` | INT | 16 | The frame rate of the video (defaults to 16) |
 | `max_frames_per_round` | INT | 81 | Maximum frames WAN can generate per run (81 for most WAN models) |
 | `current_round` | INT | 1 | Which round you are currently running (starts at 1) |
 
@@ -49,6 +49,7 @@ The node will appear under the category: `Video / Frame Utils`
 | `total_rounds` | INT | Total number of runs needed to complete your video |
 | `start_frame` | INT | The first frame number this round covers (1-based) |
 | `end_frame` | INT | The last frame number this round covers (1-based) |
+| `total_duration` | FLOAT | The total duration of the video in seconds |
 | `info` | STRING | Summary string for debugging — connect to a Show Any node |
 
 ---
@@ -147,6 +148,7 @@ ComfyUI/custom_nodes/wanExtendVideoCountFrame.py
 | 参数 | 类型 | 默认值 | 说明 |
 |---|---|---|---|
 | `total_frames` | INT | 163 | 目标视频总帧数 |
+| `fps` | INT | 16 | 视频帧率（默认 16） |
 | `max_frames_per_round` | INT | 81 | 每轮工作流最大帧数（大多数 WAN 模型为 81） |
 | `current_round` | INT | 1 | 当前是第几轮（从 1 开始） |
 
@@ -160,6 +162,7 @@ ComfyUI/custom_nodes/wanExtendVideoCountFrame.py
 | `total_rounds` | INT | 完成整个视频需要跑的总轮数 |
 | `start_frame` | INT | 本轮起始帧编号（从 1 开始计数） |
 | `end_frame` | INT | 本轮结束帧编号（从 1 开始计数，含） |
+| `total_duration` | FLOAT | 视频总时长（单位：秒） |
 | `info` | STRING | 调试信息汇总字符串 — 连接到 Show Any 节点查看 |
 
 ---

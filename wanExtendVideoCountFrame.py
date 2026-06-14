@@ -32,6 +32,17 @@ class wanExtendVideoCountFrame:
                         "tooltip": "视频总帧数",
                     },
                 ),
+                "fps": (
+                    "FLOAT",
+                    {
+                        "default": 16.0,
+                        "min": 0.01,
+                        "max": 240.0,
+                        "step": 1.0,
+                        "display": "number",
+                        "tooltip": "视频帧率",
+                    },
+                ),
                 "max_frames_per_round": (
                     "INT",
                     {
@@ -58,12 +69,13 @@ class wanExtendVideoCountFrame:
         }
 
     # 输出类型定义
-    RETURN_TYPES = ("INT", "INT", "INT", "INT", "STRING")
+    RETURN_TYPES = ("INT", "INT", "INT", "INT", "FLOAT", "STRING")
     RETURN_NAMES = (
         "current_round_frames",   # 当前轮应处理的帧数
         "total_rounds",           # 总共需要多少轮
         "start_frame",            # 当前轮起始帧（1-based）
         "end_frame",              # 当前轮结束帧（1-based，含）
+        "total_duration",         # 总时长（秒）
         "info",                   # 汇总信息字符串，方便调试
     )
 
@@ -71,11 +83,13 @@ class wanExtendVideoCountFrame:
     CATEGORY = "Video/Frame Utils"
     OUTPUT_NODE = False
 
-    def calculate(self, total_frames: int, max_frames_per_round: int, current_round: int):
+    def calculate(self, total_frames: int, fps: float, max_frames_per_round: int, current_round: int):
         max_fr = max(1, max_frames_per_round)  # 防止除以零
+        fps_clamped = max(0.01, fps)          # 防止除以零
 
-        # 1. 计算总轮数
+        # 1. 计算总轮数与总时长
         total_rounds = math.ceil(total_frames / max_fr)
+        total_duration = total_frames / fps_clamped
 
         # 2. 校正 current_round 范围（防止用户输入超出范围）
         current_round_clamped = max(1, min(current_round, total_rounds))
@@ -95,6 +109,8 @@ class wanExtendVideoCountFrame:
         # 5. 构建信息字符串
         info = (
             f"总帧数: {total_frames} | "
+            f"帧率: {fps_clamped:.2f}fps | "
+            f"总时长: {total_duration:.2f}s | "
             f"每轮上限: {max_fr} | "
             f"总轮数: {total_rounds} | "
             f"当前轮: {current_round_clamped}/{total_rounds} | "
@@ -113,6 +129,7 @@ class wanExtendVideoCountFrame:
             total_rounds,
             start_frame,
             end_frame,
+            total_duration,
             info,
         )
 
