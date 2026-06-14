@@ -4,7 +4,8 @@ A ComfyUI utility node for **WAN video model** workflows — designed to work wi
 
 When generating long videos with WAN, each workflow run has a maximum frame limit (default **81 frames**). This node automatically calculates how many rounds are needed for your total frame count, and tells you exactly how many frames to use in each round — including the final partial round.
 
-![preview](preview.png)
+ <img width="1816" height="1214" alt="image" src="https://github.com/user-attachments/assets/3c73765a-57e0-4f66-baaf-d10707aa4347" />
+
 
 ---
 
